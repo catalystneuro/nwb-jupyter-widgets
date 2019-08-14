@@ -6,7 +6,10 @@ authors: Matt McCormick (matt.mccormick@kitware.com) and Ben Dichter (bdichter@l
 
 ## Installation
 ```bash
-pip install nwb-jupyter-widgets
+git clone https://github.com/ben-dichter-consulting/nwb-jupyter-widgets
+pip install -e nwb-jupyter-widgets
+#to launch jupyter notebook in browser
+jupyter notebook
 ```
 
 ## Usage
