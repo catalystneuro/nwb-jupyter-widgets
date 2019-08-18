@@ -78,6 +78,8 @@ def show_session_raster(node):
     fig, ax = plt.subplots(1, 1)
     ax.figure.set_size_inches(12,6)
     ax.eventplot(spike_times)
+    ax.set_xlabel('Time (seconds)')
+    ax.set_ylabel('Unit #')
     return fig
 
 
