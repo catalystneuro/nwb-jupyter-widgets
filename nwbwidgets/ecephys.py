@@ -67,3 +67,21 @@ def show_spectrogram(neurodata, channel=0, **kwargs):
     ax.imshow(np.log(np.abs(Zxx)), aspect='auto', extent=[0, max(t), 0, max(f)], origin='lower')
     ax.set_ylim(0, 50)
     plt.show(ax.figure())
+
+def show_session_raster(node):
+    df = build_table(node)
+    #unit_id = 7
+    #spike_times = df.iloc[df.index == 7]['spike_times']
+    #index_list = df.index.tolist()
+    spike_times = df.spike_times[0:100].tolist()
+
+    fig, ax = plt.subplots(1, 1)
+    ax.figure.set_size_inches(12,6)
+    ax.eventplot(spike_times)
+    return fig
+
+
+def build_table(node):
+    df = node.to_dataframe(exclude=set(['timeseries', 'timeseries_index']))
+    df.sort_values(by='id', axis=0, inplace=True)
+    return df

@@ -25,7 +25,17 @@ def show_spatial_series(node, **kwargs):
         unit = None
 
     fig, ax = plt.subplots()
-    if data.shape[0] == 1:
+    if data.shape[0] > 1:
+        if node.timestamps:
+            ax.plot(node.timestamps, data)
+        else:
+            ax.plot(np.arange(len(data)) / node.rate, data)
+        ax.set_xlabel('t (sec)')
+        if unit:
+            ax.set_ylabel('x ({})'.format(unit))
+        else:
+            ax.set_ylabel('x')
+    elif data.shape[0] == 1:
         if node.timestamps:
             ax.plot(node.timestamps, data)
         else:
