@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from ipywidgets import widgets
 from IPython import display
 from collections import Iterable
+import pandas as pd
 
 
 def show_timeseries(node, **kwargs):
@@ -29,7 +30,8 @@ def show_timeseries(node, **kwargs):
 def show_dynamic_table(node, **kwargs):
     out1 = widgets.Output()
     with out1:
-        display.display(node.to_dataframe())
+        df = node.to_dataframe()
+        display.display(df.head(20))
     return out1
 
 

@@ -36,6 +36,7 @@ def processing_module(node, neurodata_vis_spec):
     return nwb2widget(node.data_interfaces, neurodata_vis_spec=neurodata_vis_spec)
 
 
+
 def show_text_fields(node, exclude=('comments', 'interval'), **kwargs):
     info = []
     for key in node.fields:
@@ -44,16 +45,38 @@ def show_text_fields(node, exclude=('comments', 'interval'), **kwargs):
     return widgets.VBox(info)
 
 
+# default_neurodata_vis_spec = OrderedDict({
+#     pynwb.misc.AnnotationSeries: OrderedDict({
+#         'text': show_text_fields,
+#         'times': misc.show_annotations}),
+#     pynwb.core.LabelledDict: dict2accordion,
+#     pynwb.ProcessingModule: processing_module,
+#     pynwb.core.DynamicTable: base.show_dynamic_table,
+#     pynwb.ecephys.LFP: ecephys.show_lfp,
+#     pynwb.behavior.Position: behavior.show_position,
+#     pynwb.behavior.SpatialSeries: behavior.show_spatial_series,
+#     pynwb.image.GrayscaleImage: image.show_grayscale_image,
+#     pynwb.image.ImageSeries: image.show_image_series,
+#     pynwb.image.IndexSeries: image.show_index_series,
+#     pynwb.TimeSeries: base.show_timeseries,
+#     pynwb.core.NWBBaseType: base.show_neurodata_base
+# })
+
 default_neurodata_vis_spec = OrderedDict({
     pynwb.misc.AnnotationSeries: OrderedDict({
         'text': show_text_fields,
         'times': misc.show_annotations}),
     pynwb.core.LabelledDict: dict2accordion,
     pynwb.ProcessingModule: processing_module,
+    pynwb.misc.Units:  OrderedDict({
+        'table': base.show_dynamic_table,
+        'session raster': ecephys.show_session_raster}),
     pynwb.core.DynamicTable: base.show_dynamic_table,
     pynwb.ecephys.LFP: ecephys.show_lfp,
     pynwb.behavior.Position: behavior.show_position,
-    pynwb.behavior.SpatialSeries: behavior.show_spatial_series,
+    pynwb.behavior.SpatialSeries: OrderedDict({
+        'position': behavior.show_spatial_series,
+        'speed': behavior.show_spatial_series_speed}),
     pynwb.image.GrayscaleImage: image.show_grayscale_image,
     pynwb.image.ImageSeries: image.show_image_series,
     pynwb.image.IndexSeries: image.show_index_series,
