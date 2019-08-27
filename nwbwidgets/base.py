@@ -31,7 +31,7 @@ def show_dynamic_table(node, **kwargs):
     out1 = widgets.Output()
     with out1:
         df = node.to_dataframe()
-        display.display(df.head(20))
+        display.display(df.head(10))
     return out1
 
 

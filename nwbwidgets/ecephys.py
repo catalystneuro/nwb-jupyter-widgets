@@ -1,6 +1,7 @@
 from nwbwidgets import view
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from ipywidgets import widgets
 import itkwidgets
 import itk
@@ -69,17 +70,41 @@ def show_spectrogram(neurodata, channel=0, **kwargs):
     plt.show(ax.figure())
 
 def show_session_raster(node):
-    df = build_table(node)
-    #unit_id = 7
-    #spike_times = df.iloc[df.index == 7]['spike_times']
-    #index_list = df.index.tolist()
-    spike_times = df.spike_times[0:100].tolist()
+    #constants
+    num_units = 100
+    max_plt_time = 80
 
+    # build df of first num_units
+    df = build_table(node)
+    spike_times = df.spike_times[0:num_units].tolist()
+
+    # initialize
+    closest_electrode = np.empty(num_units, dtype=int)
+    reduced_spike_times = spike_times
+    for unit in range(num_units):
+        # for better visualization, plot spike_times less than max_plt_time seconds
+        unit_times = reduced_spike_times[unit]
+        unit_times = unit_times[np.where(unit_times < max_plt_time)]
+        reduced_spike_times[unit] = unit_times
+
+        # identify the electrode recording the largest waveform of the unit
+        if 'waveform_mean' in df.columns:
+            waveform_mean_abs = np.abs(df['waveform_mean'].iloc[unit])
+            magnitude_per_electrode = np.amax(waveform_mean_abs, 0)
+            closest_electrode[unit] = np.argmax(magnitude_per_electrode)
+        else:
+            closest_electrode[unit] = 25 #default color in gist_earth_cmap
+
+    # create colormap to map the unit's closest electrode to color
+    gist_earth_cmap = cm.get_cmap('gist_earth', num_units)
+    cmap_lookup = gist_earth_cmap(closest_electrode/num_units)
+    # plot spike times for each unit
     fig, ax = plt.subplots(1, 1)
     ax.figure.set_size_inches(12,6)
-    ax.eventplot(spike_times)
+    ax.eventplot(reduced_spike_times,color = cmap_lookup)
     ax.set_xlabel('Time (seconds)')
     ax.set_ylabel('Unit #')
+
     return fig
 
 

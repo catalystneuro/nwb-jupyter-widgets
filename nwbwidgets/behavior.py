@@ -65,7 +65,7 @@ def show_spatial_series(node, **kwargs):
     return widgets.HBox([text_wiget, view.fig2widget(fig)])
 
 def show_spatial_series_speed(node, **kwargs):
-
+    plt_color = '#FE6E00'
     text_wiget = view.show_text_fields(node, exclude=('timestamps_unit', 'comments'))
 
     if node.conversion and np.isfinite(node.conversion):
@@ -90,9 +90,13 @@ def show_spatial_series_speed(node, **kwargs):
     sp_len = len(smoothed_speed)
     if smoothed_speed.shape[0] > 1:
         if node.timestamps:
-            ax.plot(node.timestamps[0:np.minimum(sp_len,mx_pts)], smoothed_speed[0:np.minimum(sp_len,mx_pts)])
+            ax.plot(node.timestamps[0:np.minimum(sp_len,mx_pts)],
+                    smoothed_speed[0:np.minimum(sp_len,mx_pts)],
+                    color=plt_color)
         else:
-            ax.plot(np.arange(np.minimum(sp_len,mx_pts)) / node.rate, smoothed_speed[0:np.minimum(sp_len,mx_pts)])
+            ax.plot(np.arange(np.minimum(sp_len,mx_pts)) / node.rate,
+                    smoothed_speed[0:np.minimum(sp_len,mx_pts)],
+                    color=plt_color)
         ax.set_xlabel('t (sec)')
 
         if unit:
@@ -102,9 +106,13 @@ def show_spatial_series_speed(node, **kwargs):
 
     elif smoothed_speed.shape[0] == 1:
         if node.timestamps:
-            ax.plot(node.timestamps[0:np.minimum(sp_len,mx_pts)], smoothed_speed[0:np.minimum(sp_len,mx_pts)])
+            ax.plot(node.timestamps[0:np.minimum(sp_len,mx_pts)],
+                    smoothed_speed[0:np.minimum(sp_len,mx_pts)],
+                    color=plt_color)
         else:
-            ax.plot(np.arange(np.minimum(sp_len,mx_pts)) / node.rate, smoothed_speed[0:np.minimum(sp_len,mx_pts)])
+            ax.plot(np.arange(np.minimum(sp_len,mx_pts)) / node.rate,
+                    smoothed_speed[0:np.minimum(sp_len,mx_pts)],
+                    color=plt_color)
         ax.set_xlabel('t (sec)')
 
         if unit:
@@ -113,7 +121,7 @@ def show_spatial_series_speed(node, **kwargs):
             ax.set_xlabel('smoothed speed')
         ax.set_ylabel('smoothed speed')
     elif speed.shape[1] == 2:
-        ax.plot(speed[:, 0], speed[:, 1])
+        ax.plot(speed[:, 0], speed[:, 1], color=plt_color)
         if unit:
             ax.set_xlabel('x ({})'.format(unit))
             ax.set_ylabel('y ({})'.format(unit))
